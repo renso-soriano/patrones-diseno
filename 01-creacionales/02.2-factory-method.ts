@@ -35,19 +35,33 @@ interface Report {
 // Implementar SalesReport e InventoryReport
 
 class SalesReport implements Report {
+  generate(): void {
+    console.log('Generando reporte de ventas...');
+  }
   // TODO: implementar el método e imprimir en consola:
   // 'Generando reporte de ventas...'
 }
 
 class InventoryReport implements Report {
+  generate(): void {
+    console.log('Generando reporte de inventario...');
+  }
   // TODO: implementar el método e imprimir en consola:
   // 'Generando reporte de inventario...'
+}
+
+class AccountingReport implements Report {
+  generate(): void {
+    console.log('Generando reporte de contabilidad...');
+  }
+  // TODO: implementar el método e imprimir en consola:
+  // 'Generando reporte de contabilidad...'
 }
 
 // 3. Clase Base ReportFactory con el Método Factory
 
 abstract class ReportFactory {
-  abstract createReport(): Report;
+  protected abstract createReport(): Report;
 
   generateReport(): void {
     const report = this.createReport();
@@ -59,32 +73,45 @@ abstract class ReportFactory {
 
 class SalesReportFactory extends ReportFactory {
   createReport(): Report {
-    throw new Error('Method not implemented.');
+    return new SalesReport()
   }
 }
 
 class InventoryReportFactory extends ReportFactory {
   createReport(): Report {
-    throw new Error('Method not implemented.');
+    return new InventoryReport()
   }
 }
 
+class AccountingReportFactory extends ReportFactory{
+  createReport(): Report {
+    return new AccountingReport()
+  }
+}
 // 5. Código Cliente para Probar
 
 function main() {
   let reportFactory: ReportFactory;
 
-  const reportType = prompt(
-    '¿Qué tipo de reporte deseas? %c(sales/inventory)',
-    COLORS.red
-  );
+  const reportType = prompt('¿Qué tipo de reporte deseas? %c(sales/inventory/accounting)');
 
-  if (reportType === 'sales') {
-    reportFactory = new SalesReportFactory();
-  } else {
-    reportFactory = new InventoryReportFactory();
-  }
+ 
+  switch(reportType){
+    case 'sales':
+      reportFactory = new SalesReportFactory();
+      break;
 
+    case 'inventory':
+      reportFactory = new InventoryReportFactory();
+      break;
+
+    case 'accounting':
+      reportFactory = new AccountingReportFactory();
+      break;
+
+    default: throw new Error('Opcion no valida')
+ }
+  
   reportFactory.generateReport();
 }
 
